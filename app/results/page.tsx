@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import ProductCard from '../components/ProductCard';
 import { parseRecommendationResponse, ParsedRecommendation } from '../lib/recommendationParser';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -15,10 +16,6 @@ export default function ResultsPage() {
 
   useEffect(() => {
     const recommendation = searchParams.get('recommendation');
-    const category = searchParams.get('category');
-    const age = searchParams.get('age');
-    const gender = searchParams.get('gender');
-    const budget = searchParams.get('budget');
 
     if (!recommendation) {
       setError('推薦データが見つかりません。');
@@ -29,7 +26,7 @@ export default function ResultsPage() {
     try {
       const parsed = parseRecommendationResponse(recommendation);
       setParsedData(parsed);
-    } catch (err) {
+    } catch {
       setError('推薦データの解析に失敗しました。');
     } finally {
       setIsLoading(false);
@@ -54,12 +51,12 @@ export default function ResultsPage() {
           <div className="text-6xl mb-4">😵</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-4">エラーが発生しました</h1>
           <p className="text-gray-600 mb-6">{error}</p>
-          <a
+          <Link
             href="/"
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
           >
             ホームに戻る
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -105,7 +102,7 @@ export default function ResultsPage() {
 
           {/* 戻るボタン */}
           <div className="text-center">
-            <a
+            <Link
               href="/"
               className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
             >
@@ -113,7 +110,7 @@ export default function ResultsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               新しい推薦を求める
-            </a>
+            </Link>
           </div>
         </main>
         <Footer />

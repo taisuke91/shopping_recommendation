@@ -35,7 +35,7 @@ export function parseRecommendationResponse(response: string): ParsedRecommendat
       const productMatches = xmlContent.match(/<product>([\s\S]*?)<\/product>/g);
       
       if (productMatches) {
-        productMatches.forEach((productXml, index) => {
+        productMatches.forEach((productXml) => {
           const nameMatch = productXml.match(/<name>(.*?)<\/name>/);
           const priceMatch = productXml.match(/<price>(.*?)<\/price>/);
           const featuresMatch = productXml.match(/<features>(.*?)<\/features>/);
@@ -97,7 +97,7 @@ export function parseRecommendationResponse(response: string): ParsedRecommendat
 
       // 価格の解析 - より柔軟なパターン
       if (inProductsSection && (line.includes('価格:') || line.includes('価格：')) && currentProduct.name) {
-        let priceMatch = line.match(/価格[：:]\s*(.*?)(?:\s|$)/);
+        const priceMatch = line.match(/価格[：:]\s*(.*?)(?:\s|$)/);
         if (priceMatch) {
           currentProduct.price = priceMatch[1].trim();
         }
@@ -106,7 +106,7 @@ export function parseRecommendationResponse(response: string): ParsedRecommendat
 
       // 特徴の解析 - より柔軟なパターン
       if (inProductsSection && (line.includes('特徴:') || line.includes('特徴：')) && currentProduct.name) {
-        let featureMatch = line.match(/特徴[：:]\s*(.*?)(?:\s|$)/);
+        const featureMatch = line.match(/特徴[：:]\s*(.*?)(?:\s|$)/);
         if (featureMatch) {
           currentProduct.features = [featureMatch[1].trim()];
         }
@@ -115,7 +115,7 @@ export function parseRecommendationResponse(response: string): ParsedRecommendat
 
       // おすすめ理由の解析 - より柔軟なパターン
       if (inProductsSection && (line.includes('おすすめ理由:') || line.includes('おすすめ理由：')) && currentProduct.name) {
-        let reasonMatch = line.match(/おすすめ理由[：:]\s*(.*?)(?:\s|$)/);
+        const reasonMatch = line.match(/おすすめ理由[：:]\s*(.*?)(?:\s|$)/);
         if (reasonMatch) {
           currentProduct.reason = reasonMatch[1].trim();
         }

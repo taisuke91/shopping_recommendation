@@ -10,9 +10,7 @@ interface RecommendationForm {
   budget: number;
 }
 
-interface RecommendationResponse {
-  recommendation: string;
-}
+
 
 export default function ShoppingRecommendation() {
   const router = useRouter();
