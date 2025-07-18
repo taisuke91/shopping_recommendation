@@ -28,10 +28,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // プロンプトを生成
+    // プロンプトを生成(/lib/prompts.ts)
     const prompt = getFormattedPrompt(category, age, gender, budget);
 
-    // Gemini API で推薦を取得
+    // Gemini API で推薦を取得(/lib/gemini.ts)
     const recommendation = await getGeminiRecommendation(prompt);
 
     return NextResponse.json({ recommendation });

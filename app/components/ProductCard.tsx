@@ -15,6 +15,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       {/* 商品画像プレースホルダー */}
       <div className="h-48 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-6xl opacity-20">
+          {/* 適当にアイコンを設定 */}
           {index === 1 ? '🛍️' : index === 2 ? '👕' : '👜'}
         </div>
       </div>

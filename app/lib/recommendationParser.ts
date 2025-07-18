@@ -6,26 +6,14 @@ export interface ProductRecommendation {
   amazonSearchQuery?: string;
 }
 
-export interface ShoppingTips {
-  stylingAdvice: string;
-  budgetTips: string;
-  trendAdvice: string;
-}
-
 export interface ParsedRecommendation {
   products: ProductRecommendation[];
-  tips: ShoppingTips;
 }
 
 export function parseRecommendationResponse(response: string): ParsedRecommendation {
   console.log('Parsing response:', response.substring(0, 200) + '...');
   
   const products: ProductRecommendation[] = [];
-  const tips: ShoppingTips = {
-    stylingAdvice: '',
-    budgetTips: '',
-    trendAdvice: ''
-  };
 
   try {
     // XML形式の解析を試行
@@ -135,7 +123,6 @@ export function parseRecommendationResponse(response: string): ParsedRecommendat
   });
 
   console.log('Parsed products:', products);
-  console.log('Parsed tips:', tips);
 
-  return { products, tips };
+  return { products };
 } 

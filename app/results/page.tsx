@@ -9,10 +9,10 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import Footer from '../components/Footer';
 
 function ResultsPageContent() {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); //URLのクエリパラメータ（例: /results?id=123 の id=123 の部分）を読み取るためのフック
   const [parsedData, setParsedData] = useState<ParsedRecommendation | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true); //推薦データの読み込み中かどうかを管理するstate
+  const [error, setError] = useState<string>(''); //エラーメッセージを管理するstate
 
   useEffect(() => {
     const recommendation = searchParams.get('recommendation');
@@ -70,7 +70,7 @@ function ResultsPageContent() {
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <main className="max-w-7xl mx-auto p-6">
-          {/* ヘッダー */}
+          {/* このページのheader的な部分 */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
               🎯 あなたへのおすすめ商品
@@ -94,6 +94,8 @@ function ResultsPageContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {parsedData.products.map((product, index) => (
                 <ProductCard key={index} product={product} index={index + 1} />
+                //ProductCardコンポーネントをレンダリングする。
+                //keyはReactのキーで、一意の値を指定する必要がある。indexは商品のインデックスで、1から始まる。
               ))}
             </div>
           </div>
@@ -121,6 +123,8 @@ function ResultsPageContent() {
 
 export default function ResultsPage() {
   return (
+    //Suspenseは、その子コンポーネントがデータの取得などでレンダリングの準備ができていない場合に、
+    //一時的な待機画面（フォールバックUI）を表示するための仕組み
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">

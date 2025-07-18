@@ -1,3 +1,7 @@
+//アプリケーションの一部で予期しないエラーが発生した際に、アプリ全体がクラッシュして白い画面になるのを防ぎ、
+//代わりにユーザーフレンドリーなエラー画面を表示するためのものです。
+//このコンポーネントを、エラーが発生する可能性のある他のコンポーネントの親として配置します。
+
 'use client';
 
 import { Component, ReactNode } from 'react';
@@ -17,15 +21,21 @@ export default class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false };
   }
 
+  //子コンポーネントでエラーが発生した際に最初に呼び出される静的メソッド
+  //stateを { hasError: true } に更新し、エラー画面を表示するための再レンダリングをトリガーします。
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
+  //エラーが発生した場合に、エラーの詳細をコンソールに出力する
   componentDidCatch(error: Error, errorInfo: unknown) {
     console.error('Error caught by boundary:', error, errorInfo);
   }
 
+  //そのコンポーネントが画面に何を表示するか（UI）を定義するためのメソッド
   render() {
+    
+    //hasErrorがtrueの場合、エラー画面（フォールバックUI）を返します。
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
@@ -48,6 +58,7 @@ export default class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    //hasErrorがfalseの場合、通常の子コンポーネントを返します。
     return this.props.children;
   }
 } 

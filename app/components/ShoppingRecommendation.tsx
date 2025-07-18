@@ -11,7 +11,6 @@ interface RecommendationForm {
 }
 
 
-
 export default function ShoppingRecommendation() {
   const router = useRouter();
   const [formData, setFormData] = useState<RecommendationForm>({
@@ -22,25 +21,27 @@ export default function ShoppingRecommendation() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  //1つ目のisLoadingは現在の状態を読むための変数、2つ目のisLoadingは状態を変更するための関数
+
   const [error, setError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    e.preventDefault(); //フォーム送信によるページの再読み込みを防ぐ
+    setIsLoading(true); //Loadingの状態をtrueにする
+    setError(''); //エラーメッセージをクリア
 
     try {
       const response = await fetch('/api/recommendations', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', //JSON形式でデータを送信
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), //formDataをJSON形式に変換してreq.bodyとして送信
       });
 
-      const data = await response.json();
+      const data = await response.json(); //APIからのレスポンスをJSON形式で受け取る
 
-      if (!response.ok) {
+      if (!response.ok) { //レスポンスが200番台でない場合はエラーを投げる
         throw new Error(data.error || '推薦の取得に失敗しました。');
       }
 
@@ -53,15 +54,15 @@ export default function ShoppingRecommendation() {
         budget: formData.budget.toString()
       });
 
-      router.push(`/results?${params.toString()}`);
+      router.push(`/results?${params.toString()}`); //結果ページにリダイレクト
     } catch (err) {
       setError(err instanceof Error ? err.message : '予期しないエラーが発生しました。');
-      setIsLoading(false);
+      setIsLoading(false); //Loadingの状態をfalseにする
     }
   };
 
   const handleInputChange = (field: keyof RecommendationForm, value: string | number) => {
-    setFormData(prev => ({
+    setFormData(prev => ({ //prevは前のstateを参照するための変数, prev => ({ ... }): 前の状態 (prev)を元に、新しい状態のオブジェクトを返します。
       ...prev,
       [field]: value
     }));
@@ -69,6 +70,7 @@ export default function ShoppingRecommendation() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      {/* このページのheader的な部分　*/}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
           🛍️ お買い物アドバイザー
@@ -77,6 +79,7 @@ export default function ShoppingRecommendation() {
           あなたにぴったりの商品を推薦します
         </p>
       </div>
+
 
       <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,7 +94,7 @@ export default function ShoppingRecommendation() {
               onChange={(e) => handleInputChange('category', e.target.value)}
               placeholder="例: バッグ、洋服、メガネ、靴など"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
+              required //必須項目
             />
           </div>
 
@@ -146,14 +149,15 @@ export default function ShoppingRecommendation() {
             </div>
           </div>
 
+          {/* 送信ボタン */}
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading} //isLoadingがtrueの場合はボタンを無効化
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"
           >
-            {isLoading ? (
+            {isLoading ? ( //isLoadingがtrueの場合は推薦を生成中...と表示
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div> {/* ぐるぐる回るアニメーション */}
                 推薦を生成中...
               </>
             ) : (
@@ -168,8 +172,7 @@ export default function ShoppingRecommendation() {
           <p className="text-red-700">{error}</p>
         </div>
       )}
-
-
+      
     </div>
   );
 } 
